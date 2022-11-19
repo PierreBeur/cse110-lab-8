@@ -42,11 +42,19 @@ describe('Basic user flow for Website', () => {
   // the button swaps to "Remove from Cart"
   it('Clicking the "Add to Cart" button should change button text', async () => {
     console.log('Checking the "Add to Cart" button...');
-    // TODO - Step 2
-    // Query a <product-item> element using puppeteer ( checkout page.$() and page.$$() in the docs )
-    // Grab the shadowRoot of that element (it's a property), then query a button from that shadowRoot.
-    // Once you have the button, you can click it and check the innerText property of the button.
+    // Query a <product-item> element using puppeteer
+    const prodItem = await page.$('product-item');
+    // Grab the shadowRoot of that element,
+    const shadowRoot = await prodItem.getProperty('shadowRoot');
+    // then query a button from that shadowRoot.
+    const button = await shadowRoot.$('button');
+    // Once you have the button, you can click it,
+    await button.click();
+    // and check the innerText property of the button.
+    const innerText = await button.getProperty('innerText');
     // Once you have the innerText property, use innerText.jsonValue() to get the text value of it
+    const textValue = await innerText.jsonValue();
+    expect(textValue).toBe("Remove from Cart");
   }, 2500);
 
   // Check to make sure that after clicking "Add to Cart" on every <product-item> that the Cart
