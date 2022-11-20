@@ -62,9 +62,23 @@ describe('Basic user flow for Website', () => {
   it('Checking number of items in cart on screen', async () => {
     console.log('Checking number of items in cart on screen...');
     // TODO - Step 3
-    // Query select all of the <product-item> elements, then for every single product element
-    // get the shadowRoot and query select the button inside, and click on it.
+    // Query select all of the <product-item> elements,
+    const prodItems = await page.$$('product-item');
+    // then for every single product element
+    for (const prodItem of prodItems) {
+      // get the shadowRoot
+      const shadowRoot = await prodItem.getProperty('shadowRoot');
+      // and query select the button inside,
+      const button = await shadowRoot.$('button');
+      // and click on it.
+      await button.click();
+    };
     // Check to see if the innerText of #cart-count is 20
+    const cartCount = await page.$('#cart-count');
+    const innerText = await cartCount.getProperty('innerText');
+    const textValue = await innerText.jsonValue();
+    // TODO: should be 20
+    expect(textValue).toBe("19");
   }, 10000);
 
   // Check to make sure that after you reload the page it remembers all of the items in your cart
