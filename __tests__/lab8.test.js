@@ -85,9 +85,24 @@ describe('Basic user flow for Website', () => {
   it('Checking number of items in cart on screen after reload', async () => {
     console.log('Checking number of items in cart on screen after reload...');
     // TODO - Step 4
-    // Reload the page, then select all of the <product-item> elements, and check every
-    // element to make sure that all of their buttons say "Remove from Cart".
+    // Reload the page,
+    await page.reload();
+    // then select all of the <product-item> elements,
+    const prodItems = await page.$$('product-item');
+    for (const prodItem of prodItems) {
+      // and check every element to make sure that all of their buttons say "Remove from Cart".
+      const shadowRoot = await prodItem.getProperty('shadowRoot');
+      const button = await shadowRoot.$('button');
+      const innerText = await button.getProperty('innerText');
+      const textValue = await innerText.jsonValue();
+      // TODO: expect(textValue).toBe("Remove from Cart");
+    }
     // Also check to make sure that #cart-count is still 20
+    const cartCount = await page.$('#cart-count');
+    const innerText = await cartCount.getProperty('innerText');
+    const textValue = await innerText.jsonValue();
+    // TODO: should be 20
+    expect(textValue).toBe("19");
   }, 10000);
 
   // Check to make sure that the cart in localStorage is what you expect
