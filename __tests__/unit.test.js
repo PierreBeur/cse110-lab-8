@@ -55,7 +55,7 @@ for (const [fName, fTest] of tests) {
     for (const [input, output] of fTest.pairs) {
       test(`${input} is${output?'':' not'} a ${fTest.matches}`, () => {
         expect(functions[fName](input)).toBe(output);
-      })
+      });
     }
   });
 }
