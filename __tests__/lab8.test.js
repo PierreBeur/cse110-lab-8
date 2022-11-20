@@ -55,13 +55,14 @@ describe('Basic user flow for Website', () => {
     // Once you have the innerText property, use innerText.jsonValue() to get the text value of it
     const textValue = await innerText.jsonValue();
     expect(textValue).toBe("Remove from Cart");
+    // Click the button again to swap it back to "Add to Cart"
+    await button.click();
   }, 2500);
 
   // Check to make sure that after clicking "Add to Cart" on every <product-item> that the Cart
   // number in the top right has been correctly updated
   it('Checking number of items in cart on screen', async () => {
     console.log('Checking number of items in cart on screen...');
-    // TODO - Step 3
     // Query select all of the <product-item> elements,
     const prodItems = await page.$$('product-item');
     // then for every single product element
@@ -77,14 +78,12 @@ describe('Basic user flow for Website', () => {
     const cartCount = await page.$('#cart-count');
     const innerText = await cartCount.getProperty('innerText');
     const textValue = await innerText.jsonValue();
-    // TODO: should be 20
-    expect(textValue).toBe("19");
+    expect(textValue).toBe("20");
   }, 10000);
 
   // Check to make sure that after you reload the page it remembers all of the items in your cart
   it('Checking number of items in cart on screen after reload', async () => {
     console.log('Checking number of items in cart on screen after reload...');
-    // TODO - Step 4
     // Reload the page,
     await page.reload();
     // then select all of the <product-item> elements,
@@ -95,26 +94,23 @@ describe('Basic user flow for Website', () => {
       const button = await shadowRoot.$('button');
       const innerText = await button.getProperty('innerText');
       const textValue = await innerText.jsonValue();
-      // TODO: expect(textValue).toBe("Remove from Cart");
+      expect(textValue).toBe("Remove from Cart");
     }
     // Also check to make sure that #cart-count is still 20
     const cartCount = await page.$('#cart-count');
     const innerText = await cartCount.getProperty('innerText');
     const textValue = await innerText.jsonValue();
-    // TODO: should be 20
-    expect(textValue).toBe("19");
+    expect(textValue).toBe("20");
   }, 10000);
 
   // Check to make sure that the cart in localStorage is what you expect
   it('Checking the localStorage to make sure cart is correct', async () => {
-    // TODO - Step 5
     // At this point the item 'cart' in localStorage should be 
     // '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]', check to make sure it is
     const cart = await page.evaluate(() => {
       return localStorage.getItem('cart');
     });
-    // TODO: should include 1
-    expect(cart).toBe('[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]');
+    expect(cart).toBe('[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]');
   });
 
   // Checking to make sure that if you remove all of the items from the cart that the cart
